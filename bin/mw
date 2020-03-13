@@ -1,0 +1,68 @@
+# Modelware
+
+# Argument checker
+if [ $# -eq 0 ]
+  then
+    echo "Nothing to do ? check help : mw --help "
+    exit 1
+fi
+
+# Helper
+if [ $1 = '-h' ] || [ $1 = '--help' ]
+  then
+  echo "Modelware Management script"
+  echo "Usage : `basename $0` start   : to start the Modelware server"
+  echo "   or : `basename $0` stop    : to stop  the Modelware server"
+  echo "   or : `basename $0` status  : to get the current Modelware server status"
+  echo "   or : `basename $0` port    : to get the current running Modelware server port"
+  echo "   or : `basename $0` build [Dockerfile]  : to build the Modelware image from a Dockerfile as parameter"
+  echo " "
+  exit 0
+fi
+
+# Get variables from configuration file
+. $MW_HOME/conf/mw.conf
+
+
+# Start a Modelware docker container
+# moreover local MODELS directory containing published model is mounted read-only into the docker
+if [ $1 = 'start' ]
+  then
+    docker run -d -P --name $MW_DOCKER_ACTIVE_NAME -v $MW_HOME/models:/home/mowa/models/:ro $MW_DOCKER_NAME
+    #Display the opened port on the docker
+    echo 'Modelware server started on :'
+    docker port $MW_DOCKER_ACTIVE_NAME 22
+fi
+
+# Stop the Modelware docker container
+if [ $1 = 'stop' ]
+  then
+    docker stop $MW_DOCKER_ACTIVE_NAME
+    docker rm $MW_DOCKER_ACTIVE_NAME
+    echo 'Modelware server successfully stopped !'
+fi
+
+# Get the running status of Modelware docker container
+if [ $1 = 'status' ]
+  then
+    result=`docker ps | grep -i "$MW_DOCKER_NAME" | grep -v "grep" | wc -l`
+    if [ $result -ge 1 ]
+      then
+          echo "[X] Modelware server is running !"
+      else
+          echo "[-] Modelware server is not running ! "
+    fi
+fi
+
+# Get the running port of Modelware docker container
+if [ $1 = "port" ]
+  then
+    docker ps --format "{{.Image}}: {{.Ports}}" | grep -i "modelware" | cut -d ' ' -f 2 | cut -d ':' -f 2 | cut -d '-' -f 1
+fi
+
+if [ $1 = 'build' ]
+  then
+    echo 'Building docker from Dockerfile ... please wait ...'
+    docker build --build-arg mw_home=${MW_HOME} -t modelware "$2/."
+    echo 'Done !'
+fi
