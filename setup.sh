@@ -1,6 +1,8 @@
 # Install Python
 # ---- in case ----
 
+#Install docker
+# ---- in case ----
 
 # -----  Add environment variables
 echo '' >> "$HOME/.bashrc"

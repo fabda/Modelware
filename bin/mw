@@ -28,7 +28,7 @@ fi
 # moreover local MODELS directory containing published model is mounted read-only into the docker
 if [ $1 = 'start' ]
   then
-    docker run -d -P --name $MW_DOCKER_ACTIVE_NAME -v $MW_HOME/models:/home/mowa/models/:ro $MW_DOCKER_NAME
+    docker run -d -P --name $MW_DOCKER_ACTIVE_NAME -v $MW_HOME/models:/home/mowa/models/:ro  -v $MW_HOME/utils:/home/mowa/utils/:ro $MW_DOCKER_NAME
     #Display the opened port on the docker
     echo 'Modelware server started on :'
     docker port $MW_DOCKER_ACTIVE_NAME 22

@@ -25,13 +25,6 @@ RUN pip install gdown
 RUN apt-get install -y wget unzip
 
 
-# COPY script directory inside docker
-RUN pwd
-RUN mkdir /home/$USER/utils/
-RUN ls /home/$USER/
-COPY ./utils/ /home/$USER/utils/
-
-
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
 #CMD ["/bin/bash"]
