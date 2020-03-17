@@ -1,1 +1,1 @@
-ls -d /home/mowa/models/
+ls /home/mowa/models/

@@ -15,7 +15,7 @@ echo 'export PATH="'$MW_BIN_PATH':$PATH"'>> "$HOME/.bashrc"
 echo 'export MW_HOME="'`pwd`'"' >> "$HOME/.bashrc"
 echo '### --------- ###' >> "$HOME/.bashrc"
 source "$HOME/.bashrc"
-#exec bash
+exec bash
 
 # --- build Modelware docker image
 echo "Build Modelware docker image"
