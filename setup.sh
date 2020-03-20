@@ -17,6 +17,10 @@ echo '### --------- ###' >> "$HOME/.bashrc"
 source "$HOME/.bashrc"
 exec bash
 
+#Permission
+chmod 755 $MW_BIN_PATH/*
+
+
 # --- build Modelware docker image
 echo "Build Modelware docker image"
 mw build .
@@ -24,3 +28,6 @@ echo "Done"
 
 # --- install gdown utility
 pip install gdown
+
+# -- install flask server
+pip install flask

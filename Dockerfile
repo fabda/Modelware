@@ -6,6 +6,7 @@ ARG UID=1000
 ARG GID=1000
 ARG PW=12345
 
+RUN ls
 RUN useradd -m ${USER} --uid=${UID} && echo "${USER}:${PW}" | chpasswd
 RUN apt-get update && apt-get install -y openssh-server
 RUN mkdir /var/run/sshd

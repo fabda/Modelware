@@ -1,0 +1,37 @@
+# Gestion du Modelware repository manager
+
+
+# Get Variables from Modelware configuration file
+. $MW_HOME/conf/mw.conf
+
+
+# Argument checker
+if [ $# -eq 0 ]
+  then
+    echo "Nothing to do ? check help : mw-repo --help "
+    exit 1
+fi
+
+
+# Helper
+if [ $1 = '-h' ] || [ $1 = '--help' ]
+  then
+
+  echo " Manage Modelware users by generating their authentication TOKEN, remove, regenerate a new TOKEN or list them."
+  echo " "
+  echo "Usage : `basename $0` [add] [rm] [regen] [list]"
+  echo "      : `basename $0` add   [USERNAME]"
+  echo "      : `basename $0` rm    [USERNAME]"
+  echo "      : `basename $0` regen [USERNAME]"
+  echo "      : `basename $0` list  [USERNAME]"
+  echo " "
+  exit 0
+fi
+
+if [ $1 = "add" ]
+  then
+    UUID=`cat /proc/sys/kernel/random/uuid`
+    USERNAME=$2
+    echo $UUID > $MW_HOME/users/$2
+    echo "User: $2 has been created with authentication token = $UUID"
+fi
