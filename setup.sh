@@ -58,8 +58,9 @@ chmod 755 $MW_BIN_PATH/*
 chmod 755 $MW_HOME/mws-start.sh
 
 #User creations
-echo "-- Setting up user dir"
+echo "-- Setting up user and models dir"
 mkdir $MW_HOME/users
+mkdir $MW_HOME/models
 
 # --- build Modelware docker image
 echo "-- Building Modelware docker image"
