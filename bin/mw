@@ -37,7 +37,6 @@ fi
 # moreover local MODELS directory containing published model is mounted read-only into the docker
 if [ $1 = 'start' ]
   then
-    #docker run -d -P --name $MW_DOCKER_ACTIVE_NAME -v $MW_HOME/models:/home/mowa/models/:ro  -v $MW_HOME/utils:/home/mowa/utils/:ro $MW_DOCKER_NAME 2>/dev/null
     if [ $# -eq 1 ]
       then
       echo "Please provide an username to start the corresponding docker:"
@@ -46,7 +45,7 @@ if [ $1 = 'start' ]
       exit 0
     fi
 
-    docker run -d -P --name $MW_DOCKER_ACTIVE_NAME-$2 -v $MW_HOME/models:/home/mowa/models/:ro  -v $MW_HOME/utils:/home/mowa/utils/:ro $MW_DOCKER_NAME 2>/dev/null
+    sudo docker run -d -P --name $MW_DOCKER_ACTIVE_NAME-$2 -v $MW_HOME/models:/home/mowa/models/:ro  -v $MW_HOME/utils:/home/mowa/utils/:ro $MW_DOCKER_NAME 2>/dev/null
 
     if [ $? -eq 125 ]
       then
@@ -55,7 +54,7 @@ if [ $1 = 'start' ]
     fi
     #Display the opened port on the docker
     echo 'Modelware server started on :'
-    docker port $MW_DOCKER_ACTIVE_NAME-$2 22
+    sudo docker port $MW_DOCKER_ACTIVE_NAME-$2 22
     exit 1
 fi
 
@@ -73,20 +72,20 @@ if [ $1 = 'stop' ]
     if [ $2 = "all" ]
       then
         echo "Stopping all Modelware server ..."
-        ID=`docker ps --format "{{.ID}}" -f "name=$MW_DOCKER_ACTIVE_NAME"`
-        docker stop $ID > /dev/null 2>&1
-        docker rm $ID > /dev/null 2>&1
+        ID=`sudo docker ps --format "{{.ID}}" -f "name=$MW_DOCKER_ACTIVE_NAME"`
+        sudo docker stop $ID > /dev/null 2>&1
+        sudo docker rm $ID > /dev/null 2>&1
         echo "Done !"
       exit 1
     fi
 
-    docker stop $MW_DOCKER_ACTIVE_NAME-$2 > /dev/null 2>&1
+    sudo docker stop $MW_DOCKER_ACTIVE_NAME-$2 > /dev/null 2>&1
     if [ $? -eq 1 ]
       then
         echo "Modelware server is not started ... please start it before stopping it (See: mw --help)"
         exit 0
     fi
-    docker rm $MW_DOCKER_ACTIVE_NAME-$2 > /dev/null 2>&1
+    sudo docker rm $MW_DOCKER_ACTIVE_NAME-$2 > /dev/null 2>&1
     if [ $? -eq 1 ]
       then
         echo "Modelware server is not started ... please start it before stopping it (See: mw --help)"
@@ -107,7 +106,7 @@ if [ $1 = 'status' ]
       exit 0
     fi
 
-    result=`docker ps | grep -i "$MW_DOCKER_ACTIVE_NAME-$2" | grep -v "grep" | wc -l`
+    result=`sudo docker ps | grep -i "$MW_DOCKER_ACTIVE_NAME-$2" | grep -v "grep" | wc -l`
     if [ $result -ge 1 ]
       then
           echo "[X] Modelware server $MW_DOCKER_ACTIVE_NAME-$2 is running !"
@@ -120,7 +119,6 @@ fi
 # Get the running port of Modelware docker container
 if [ $1 = "port" ]
   then
-    #docker ps --format "{{.Image}}: {{.Ports}}" | grep -i "modelware" | cut -d ' ' -f 2 | cut -d ':' -f 2 | cut -d '-' -f 1
     if [ $# -eq 1 ]
       then
       echo "Please provide an username to get the corresponding docker port:"
@@ -129,16 +127,16 @@ if [ $1 = "port" ]
       exit 0
     fi
 
-    docker ps --format "{{.Names}}: {{.Ports}}" | grep -i "$MW_DOCKER_ACTIVE_NAME-$2" | cut -d ' ' -f 2 | cut -d ':' -f 2 | cut -d '-' -f 1
+    sudo docker ps --format "{{.Names}}: {{.Ports}}" | grep -i "$MW_DOCKER_ACTIVE_NAME-$2" | cut -d ' ' -f 2 | cut -d ':' -f 2 | cut -d '-' -f 1
     exit 1
 fi
 
 # Get the list of Modelware docker whic are currently running
 if [ $1 = "list" ]
   then
-    docker ps
-    #name=`docker ps --format "{{.Names}}:{{.Ports}}" | cut -d "-" -f 2 | cut -d ":" -f 1 `
-    #port=`docker ps --format "{{.Names}}:{{.Ports}}" | cut -d "-" -f 2 | cut -d ":" -f 3`
+    sudo docker ps
+    #name=`sudo docker ps --format "{{.Names}}:{{.Ports}}" | cut -d "-" -f 2 | cut -d ":" -f 1 `
+    #port=`sudo docker ps --format "{{.Names}}:{{.Ports}}" | cut -d "-" -f 2 | cut -d ":" -f 3`
     #echo $name
     #echo $port
 fi
@@ -146,7 +144,7 @@ fi
 if [ $1 = 'build' ]
   then
     echo 'Building docker from Dockerfile ... please wait ...'
-    docker build --build-arg mw_home=${MW_HOME} -t modelware "$2/."
+    sudo docker build --build-arg mw_home=${MW_HOME} -t modelware "$2/."
     echo 'Done !'
     exit 1
 fi
