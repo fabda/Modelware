@@ -55,6 +55,7 @@ echo " -- Setting up permissions"
 #Permission
 echo "Permissions"
 chmod 755 $MW_BIN_PATH/*
+chmod 755 $MW_HOME/mws-start.sh
 
 #User creations
 echo "-- Setting up user dir"
