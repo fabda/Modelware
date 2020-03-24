@@ -23,7 +23,7 @@ mw-repo update
 ```
 Flask Server Start
 ```
-python3 mws.py
+./mws-start.sh
 ```
 Access Modelware Flask Server to create your Modelware container:
 http://your.ip.server.address:5000/user=YOURUSERNAME&token=YOURTOKEN
